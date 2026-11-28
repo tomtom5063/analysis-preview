@@ -1,0 +1,265 @@
+/* v2.css — 分析中心「清爽重整對照版」（2026-11-23）
+   只有 build_analysis.js --v2 產的頁面會載入，蓋在 hub.css／proto.css 後面；舊版不受影響。
+   原則：畫面上只讓「變盤紅綠」與「路單紅藍」當主角，其他顏色都收斂成黑白灰。 */
+
+/* ── 0. 頁首：台灣運彩大橫招跟著捲走，只有單行主選單黏頂 ── */
+html{scroll-padding-top:64px}
+@media (max-width:820px){ html{scroll-padding-top:58px} }
+header.site{position:static; border-bottom:0}
+.mainnav{position:sticky; top:0; z-index:50; border-bottom:1px solid var(--line)}
+.mainnav ul{padding-block:3px}
+.mainnav ul a{padding-block:6px}
+.mainnav .cta{padding-block:6px}
+/* 紅色「立即申辦」旁邊的低調「已有帳號改綁」：桌面放得下才顯示（窄螢幕靠頁尾的雙入口） */
+.mainnav .cta-sub{flex:0 0 auto; margin-right:6px; padding:5px 12px; border-radius:6px; border:1px solid var(--line); color:#3b4350; font-size:.86rem; font-weight:800; background:#fff}
+.mainnav .cta-sub:hover{border-color:var(--brand); color:var(--brand-deep)}
+@media (max-width:820px){ .mainnav .cta-sub{display:none} }   /* 跟「立即申辦」同一個斷點（830～1280 實測選單都不會被擠） */
+section.card[id^="r"]{scroll-margin-top:64px}
+
+/* ── 1. 配色降噪 ── */
+/* 球種標籤：已經有球的圖示，拿掉橘／綠／藍／灰實心底，改統一低調灰底 */
+.sp, .sp-BSB, .sp-BKB, .sp-FBL, .sp-HKY{background:#eef0f3; color:#3b4350}
+.wall .sp, .t-hero .sp, .m-hero .sp{background:#262d38; color:#e8ecf2}
+.m-meta .tag{background:#262d38; color:#e8ecf2}
+
+/* 隊名：純黑（白底）／純白（黑底）加粗，不再整串塗寶藍、亮橘 */
+.t-a, .t-h, .wall .t-a, .wall .t-h, .m-hero .t-a, .m-hero .t-h, .t-hero .t-a, .t-hero .t-h{color:inherit}
+/* 只在隊名前面放極小的「客」（淡藍）「主」（淡橘）角標；比分、已經寫了客隊／主隊的地方不加 */
+/*   名字在裡面的區塊：首頁列、報價表、焦點、單場清單、異動榜、教室例子、對戰紀錄；本身就是隊名標題的：更多數據、單場頁盤路 */
+:is(.gr-names, .q-m a, .fx-vs, .sl-m > span, .mvt td.m a, .ex, .h2h .vs) .t-a::before, :is(.fx-x h4, .tmini h3).t-a::before{content:"客"}
+:is(.gr-names, .q-m a, .fx-vs, .sl-m > span, .mvt td.m a, .ex, .h2h .vs) .t-h::before, :is(.fx-x h4, .tmini h3).t-h::before{content:"主"}
+:is(.gr-names, .q-m a, .fx-vs, .sl-m > span, .mvt td.m a, .ex, .h2h .vs) :is(.t-a, .t-h)::before,
+:is(.fx-x h4, .tmini h3):is(.t-a, .t-h)::before{
+  display:inline-block; font-size:.6rem; font-weight:800; line-height:1.5; padding:0 4px; margin-right:4px;
+  border-radius:4px; vertical-align:.2em; letter-spacing:0; font-style:normal}
+.t-a::before{color:#3b63c8; background:#e8eefb}
+.t-h::before{color:#c2570c; background:#fdeee2}
+:is(.wall, .m-hero, .t-hero) .t-a::before{color:#a9c1ff; background:rgba(122,167,255,.16)}
+:is(.wall, .m-hero, .t-hero) .t-h::before{color:#ffbc8a; background:rgba(255,154,60,.16)}
+.fx-vs :is(.t-a, .t-h)::before{font-size:.42em; vertical-align:.45em}
+.wall .fx-vs{color:#fff}   /* 隊名包在連結裡，不然會繼承連結的紅色 */
+.wall .fx-vs:hover{color:#ffd9b3}
+/* 「主讓 5.5」「客 1.85」這種一個字的主客，留淡淡的顏色就好 */
+em.t-a{color:#4a72d6} em.t-h{color:#d2691e}
+.wall em.t-a{color:#a9c1ff} .wall em.t-h{color:#ffbc8a}
+
+/* 黑牆（首頁）、深色頁首（賽事表）上的搜尋框改暗色 */
+:is(.wall, .qbar) .psearch input{background-color:#1a202a; border:1px solid #3a4250; color:#d5dbe3;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b95a3' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-4-4'/%3E%3C/svg%3E")}
+:is(.wall, .qbar) .psearch input::placeholder{color:#8b95a3}
+:is(.wall, .qbar) .psearch input:focus{border-color:#ff9a3c}
+
+/* 「資料不足」：淡灰框小字（11/23 晚起不再標「樣本少」） */
+.few, button.term.few{background:transparent; border:1px solid #d5d9df; color:#6b7380; font-weight:700}
+
+/* 完賽結果標記（11/23 晚 Tom）：讓分 客過／主過、大分／小分。淡灰底，只有關鍵字上色（主客＝淡淡的主客色、大紅小藍＝跟路單同色） */
+.bd-rs{background:#f1f3f6; color:#3a4048; box-shadow:inset 0 0 0 1px #d5dae1}
+.bd-rs i, .q-m .bd-rs i{font-style:normal; font-weight:900; font-size:inherit; margin:0}   /* 表格裡的 .q-m i（vs）有左右 5px，別套到這裡 */
+.q-bd .p-sc:first-child, .q-bd .p-live:first-child{margin-left:0}   /* 沒有標籤時比分靠齊隊名 */
+.bd-rs .rs-a{color:#4a72d6} .bd-rs .rs-h{color:#d2691e} .bd-rs .rs-o{color:#d32027} .bd-rs .rs-u{color:#1b5fbf}
+.m-hero .bd-rs{background:transparent; color:#d6deea; box-shadow:inset 0 0 0 1px #3a4250}
+.m-hero .bd-rs .rs-a{color:#a9c1ff} .m-hero .bd-rs .rs-h{color:#ffbc8a} .m-hero .bd-rs .rs-o{color:#ff7a80} .m-hero .bd-rs .rs-u{color:#7aa7ff}
+/* 盤口「初 → 現 ▲」：現在的值跟箭頭一起換行 */
+.pv-n{display:inline-flex; align-items:baseline; gap:4px; white-space:nowrap}
+/* 開賽很久還沒比分：「比分更新中」灰字，不用進行中的橘色 */
+.st-wait, .p-live.wait{color:var(--muted); font-weight:700; font-size:.8rem}
+
+/* ── 2. 首頁：標籤只留稀缺的 ── */
+.bd-l{background:transparent; color:#8a6a00; box-shadow:inset 0 0 0 1px #d9b341}             /* 場中：淡金框 */
+.bd-b2b{background:transparent; color:#6d5f8f; box-shadow:inset 0 0 0 1px #b8aed0}           /* 背靠背：低調灰紫框 */
+.bd-post{background:transparent; color:#5b6470; box-shadow:inset 0 0 0 1px #c9ced6}          /* 有分析：灰框 */
+.wall .bd-l, .m-hero .bd-l{color:#f1cf5a; box-shadow:inset 0 0 0 1px #8f7a2e}
+.wall .bd-b2b, .m-hero .bd-b2b{color:#c9bfe6; box-shadow:inset 0 0 0 1px #5d5478}
+.wall .bd-post{color:#cfd6e0; box-shadow:inset 0 0 0 1px #3a4250}
+
+/* 深色區：跑馬燈貼在最上面 */
+.v2-wall{padding-top:0}
+.v2-wall > .wrap{padding-top:16px}
+/* 找隊列（或直達卡）跟下面的焦點區之間留 12px；電腦版右框往下 5px，「這場的賠率走勢」跟左邊「焦點賽事」標題同一條中線（實測差 5px） */
+.v2-wall .fx-grid{margin-top:12px}
+@media (min-width:1001px){ .v2-wall .fx-r{margin-top:5px} }
+
+/* ── 3. 看盤快訊（跑馬燈）── */
+.ticker{display:flex; align-items:stretch; height:38px; background:#0b0f15; border-bottom:1px solid #222a36; color:#d5dbe3; font-size:.86rem; overflow:hidden}
+.tk-lab{flex:0 0 auto; display:flex; align-items:center; padding:0 12px; font-weight:900; font-size:.82rem; color:#1c1400; background:linear-gradient(90deg,#ffb020,#ff8a1f); white-space:nowrap}
+.tk-view{flex:1 1 auto; min-width:0; overflow:hidden; -webkit-mask-image:linear-gradient(90deg,transparent,#000 22px,#000 calc(100% - 22px),transparent); mask-image:linear-gradient(90deg,transparent,#000 22px,#000 calc(100% - 22px),transparent)}
+.tk-track{display:flex; width:max-content; height:100%; animation:tk-run var(--tk-dur,40s) linear infinite}
+.tk-list{display:flex; align-items:center; margin:0; padding:0 0 0 22px; list-style:none; height:100%}
+.tk-list li{display:flex; align-items:center; height:100%}
+.tk-list a{display:inline-flex; align-items:center; gap:7px; color:#d5dbe3; text-decoration:none; white-space:nowrap}
+.tk-list li::after{content:""; display:inline-block; width:4px; height:4px; border-radius:50%; background:#3a4250; margin:0 22px}
+.tk-ic{font-size:.9rem}
+.tk-k{font-size:.7rem; font-weight:900; color:#ffb86b; border:1px solid #4a3a22; border-radius:4px; padding:0 5px; line-height:1.6}
+.tk-t b{font-weight:900; color:#fff}
+.tk-t b.up, .tk-t b.r{color:#ff7a80} .tk-t b.down, .tk-t b.g{color:#3fd47f} .tk-t b.b{color:#7aa7ff}
+.tk-list a:hover .tk-t, .tk-list a:focus-visible .tk-t{color:#fff; text-decoration:underline}
+.tk-list a:focus-visible{outline:2px solid #ff9a3c; outline-offset:2px; border-radius:3px}
+.tk-btn{flex:0 0 auto; width:40px; border:0; border-left:1px solid #222a36; background:#0b0f15; color:#cfd6e0; font-size:.86rem; cursor:pointer}
+.tk-btn:hover{color:#fff; background:#141a23}
+.tk-btn:focus-visible{outline:2px solid #ff9a3c; outline-offset:-3px}
+@keyframes tk-run{from{transform:translateX(0)} to{transform:translateX(-50%)}}
+/* 按了暫停、手指按住、滑鼠移到快訊文字上（只限有滑鼠的裝置）、用鍵盤 Tab 到某一則 → 停
+   11/23 晚 Tom：按 ▶ 之後要馬上動。舊寫法用整條的 :hover／:focus-within，按完按鈕滑鼠還停在按鈕上、焦點也還在按鈕上，
+   手機點過也會黏著 hover → 一直停到點別的地方才動。現在只看文字區，按鈕不算；焦點只算鍵盤（:focus-visible）。
+   :has 另寫一條：舊瀏覽器不認得時只丟掉那一條，不會連累別的 */
+.ticker.paused .tk-track, .ticker.hold .tk-track{animation-play-state:paused}
+.tk-view:has(:focus-visible) .tk-track{animation-play-state:paused}
+@media (hover:hover){ .tk-view:hover .tk-track{animation-play-state:paused} }
+/* 不要動畫的人：不跑，改成可以左右滑 */
+@media (prefers-reduced-motion:reduce){
+  .tk-track{animation:none}
+  .tk-view{overflow-x:auto; -webkit-mask-image:none; mask-image:none}
+  .tk-list[aria-hidden]{display:none}
+  .tk-btn{display:none}
+}
+@media (max-width:520px){ .tk-lab{padding:0 9px; font-size:.74rem} .ticker{font-size:.8rem} .tk-list li::after{margin:0 16px} }
+
+/* 深色區底部的一行說明 */
+.v2-note{margin:14px 0 0; font-size:.78rem; color:#8b95a3; line-height:1.6}
+.v2-note a{color:#ffb86b; font-weight:800}
+.v2-note b{display:inline-grid; place-items:center; width:1.25em; height:1.25em; border:1px solid currentColor; border-radius:50%; font-size:.85em}
+
+/* 找隊列（11/23）：深色牆「今日看盤」標題下面一排 球種 → 聯盟 → 隊伍 ｜ 搜尋 ＋ 清除，全部跟搜尋框同一套暗色細框 */
+.v2-wall .ptop-h{margin-bottom:0}
+.qbar{display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:10px 0 0}
+.qbar select, .qbar .pk-x, .qbar .psearch input{height:40px; border-radius:10px; border:1px solid #3a4250; background-color:#1a202a; color:#d5dbe3}
+.qbar select{flex:0 1 150px; min-width:96px; font:inherit; font-size:.92rem; font-weight:700; padding:0 30px 0 12px; cursor:pointer;
+  color-scheme:dark; -webkit-appearance:none; appearance:none; text-overflow:ellipsis;
+  background:#1a202a url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b95a3' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center / 14px}
+/* Windows 的 Chrome／Edge 展開選單會用系統白底：選項自己給深底淺字，才不會白底白字 */
+.qbar select option, .qbar select optgroup{background:#1a202a; color:#e8ecf2}
+.qbar select optgroup{color:#8b95a3; font-style:normal}
+.qbar select:disabled{opacity:.45; cursor:not-allowed}
+.qbar select:hover:not(:disabled), .qbar .pk-x:hover{border-color:#5a6474}
+.qbar select:focus, .qbar .pk-x:focus-visible{outline:none; border-color:#ff9a3c; box-shadow:0 0 0 2px rgba(255,154,60,.25)}
+.qb-sep{flex:0 0 1px; align-self:center; height:22px; background:#3a4250; margin:0 4px}
+.qbar .psearch{flex:1 1 220px; max-width:none; min-width:0}
+.qbar .psearch input{padding-block:0; font-size:.95rem}
+.qbar .pk-x{flex:0 0 auto; padding:0 16px; font-size:.92rem; font-weight:800; color:#cfd6e0}
+/* 選到隊伍的直達卡 */
+.qb-card{display:flex; flex-wrap:wrap; align-items:center; gap:8px 10px; margin:8px 0 0; padding:7px 8px 7px 14px;
+  background:#141a23; border:1px solid #3a4250; border-left:3px solid #ff9a3c; border-radius:10px; color:#d5dbe3}
+.qc-h{display:flex; flex-wrap:wrap; align-items:baseline; gap:2px 10px; margin-right:auto; min-width:0}
+.qc-h b{color:#fff; font-size:1rem; font-weight:900}
+.qc-h small{color:#8b95a3; font-size:.8rem; font-weight:700}
+.qc-h .qc-fx{color:#ffb86b}
+.qc-go{display:inline-flex; align-items:center; min-height:34px; padding:4px 14px; border-radius:8px; font-size:.88rem; font-weight:800; text-decoration:none; line-height:1.35}
+.qc-go.pri{background:#ff9a3c; color:#1c1400}
+.qc-go.pri:hover{background:#ffb066}
+.qc-go.sec{border:1px solid #3a4250; color:#e8ecf2}
+.qc-go.sec:hover{border-color:#ff9a3c; color:#fff}
+.qc-go:focus-visible{outline:2px solid #fff; outline-offset:2px}
+.qb-n{display:inline-block; margin:6px 0 0; color:#ffb86b; font-size:.85rem; font-weight:800; text-decoration:none}
+.qb-n:hover{text-decoration:underline}
+.qb-card:not([hidden]) ~ .qb-n{display:none}   /* 有直達卡就不用再說「找到幾場」 */
+/* 761～1000 寬：選單縮成 130px，才不會把「清除」擠到下一行 */
+@media (max-width:1000px){ .qbar select{flex-basis:130px} }
+/* 760 以下兩排：三等分格線，第二排「搜尋＝前兩格、清除＝第三格」，上下兩排的邊線對齊 */
+@media (max-width:760px){
+  .qbar{display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:6px}
+  .qbar select{min-width:0; font-size:.88rem; padding:0 24px 0 9px; background-position:right 7px center}
+  .qbar #pk-t{grid-column:3; grid-row:1}
+  .qb-sep{display:none}
+  .qbar .psearch{grid-column:1 / 3; grid-row:2}
+  .qbar .pk-x{grid-column:3; grid-row:2; padding:0}
+  .qc-go{flex:1 1 100%; justify-content:center; text-align:center}
+}
+
+/* 報價表（賽事表每個聯盟一張、首頁速覽兩張）：原本每張表各自算欄寬，上下對不齊（11/23 實測賽事表 17 種欄寬）
+   → 電腦版全部用同一組欄寬：時間、近 5 場固定，讓分／大小／不讓分照比例，對戰拿剩下的；放不下時換行，不擠進隔壁欄 */
+@media (min-width:761px){
+  .qt{table-layout:fixed}
+  .qt th:nth-child(1){width:64px}
+  .qt th:nth-child(3){width:15%}
+  .qt th:nth-child(4){width:11%}
+  .qt th:nth-child(5){width:28%}
+  .qt th:nth-child(6){width:190px}
+  .q-v{white-space:normal}
+  .q-ml .pmls{flex-wrap:wrap}
+}
+/* 兩隊近 5 場：隊名欄固定寬（太長就…），每一列的珠子才會從同一條線開始 */
+.q-b .pbeads{grid-template-columns:64px max-content}
+.q-b .pb-n{max-width:none}
+/* 手機卡片：時間貼齊卡片上緣（原本在整張卡的正中間，跟隊名不在同一行） */
+@media (max-width:760px){ .qt .q-t{align-self:start} }
+
+/* 首頁「今天賽程速覽」（11/23：全部賽事獨立成賽事表，首頁留入口）*/
+.gl .sec-h h2 small{margin-left:10px; font-size:.85rem; color:var(--muted); font-weight:700}
+.gl-row{display:flex; align-items:flex-start; gap:10px; margin:0 0 10px}
+.gl-k{flex:0 0 auto; height:34px; display:flex; align-items:center; font-size:.78rem; font-weight:900; color:var(--muted); letter-spacing:.05em}   /* 34px＝膠囊高，字跟第一排膠囊同一條中線 */
+.gl-chips{display:flex; flex-wrap:wrap; gap:6px; min-width:0}
+.gl-chips a{display:inline-flex; align-items:center; gap:5px; padding:4px 12px; border-radius:99px; border:1.5px solid var(--line); background:#fff;
+  color:var(--fg); font-weight:800; font-size:.88rem; text-decoration:none; white-space:nowrap}
+.gl-chips a small{font-size:.74rem; font-weight:800; color:var(--muted)}
+.gl-chips a:hover{border-color:var(--fg)}
+.gl-flags a:hover{border-color:var(--brand); color:var(--brand-deep)}
+.gl .frow h2 small{font-weight:700}
+.gl-day{margin:10px 0 6px; font-weight:900; font-size:.95rem}
+.gl-dg + .gl-dg .gl-day{margin-top:14px}
+.q-lg{display:block; font-size:.72rem; font-weight:800; color:var(--muted); line-height:1.4}
+.gl-more{display:flex; justify-content:center; margin:14px 0 4px; padding:11px 16px; border-radius:12px; background:var(--fg); color:#fff; font-weight:900; text-decoration:none}
+.gl-more:hover{background:#000}
+@media (max-width:520px){
+  .gl-row{flex-direction:column; gap:4px} .gl-k{height:auto}
+  .gl .qt tr.gl-x, .gl .gl-dg.gl-x{display:none}   /* 手機一場是一張卡、很長 → 只留前 5 場，其他按「看完整賽事表」 */
+}
+/* 賽事表頁：深色頁首放找隊列；從首頁聯盟膠囊進來會捲到那個聯盟（讓出黏頂的選單） */
+.gm-hero .lead{font-size:.95rem}
+.gm-hero .ld{display:inline-block}   /* 一個片語一塊：只在逗號、句號換行，不會「都標／好」斷在字中間，也不會剩「路。」一個字掛在最後一行 */
+.gm-hero .qbar{margin-top:14px}
+.pgames .lg-block, #games{scroll-margin-top:60px}
+
+/* ── 4. 分頁：路單／近 10 場切換（路單榜、單場頁；淺色）── */
+.rv-toggle{display:inline-flex; background:#f3f4f6; border:1px solid var(--line); border-radius:99px; padding:3px; gap:2px}
+.rv-toggle button{font:inherit; font-weight:800; font-size:.85rem; border:0; background:none; color:var(--muted); border-radius:99px; padding:4px 14px; cursor:pointer}
+.rv-toggle button[aria-pressed="true"]{background:var(--fg); color:#fff}
+.card-h{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px 12px; margin-bottom:12px}
+.card-h h2{margin:0}
+.rv-bar{display:flex; justify-content:flex-end; margin:-4px 0 8px}
+.rv-scope .rv-road{display:none}
+.rv-scope.road-view .rv-road{display:block}
+.rv-scope.road-view .chain, .rv-scope.road-view .tm-row .beads{display:none}
+.tm-row .rv-road{grid-area:b; min-width:0}
+.rv-road .road{max-width:100%; margin-top:4px; padding:5px; gap:2px}
+.rv-road .ring{width:22px; height:22px; font-size:.66rem; border-width:2.5px}
+.rv-road .muted{margin:2px 0; font-size:.8rem}
+@media (max-width:760px){ .board .rv-road .road{margin-left:auto; width:max-content} }
+
+/* 路單榜：「連了幾場之後」收成可以點開的卡片 */
+details.cont-d > summary{list-style:none; cursor:pointer}
+details.cont-d > summary::-webkit-details-marker{display:none}
+details.cont-d > summary h2{margin:0; display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 0}
+details.cont-d > summary h2::after{content:"點開 ＋"; margin-left:auto; font-size:.8rem; color:var(--muted); font-weight:800}
+details.cont-d[open] > summary h2::after{content:"收起 －"}
+details.cont-d[open] > summary{margin-bottom:12px}
+
+/* 盤口異動榜：範圍＋球種篩選、變最多的那一項放大 */
+.mv-ctl{display:flex; flex-wrap:wrap; gap:8px 14px; align-items:center; margin:0 0 10px}
+.mv-ctl .seg button[aria-pressed="true"]{background:#fff; color:var(--brand-deep); box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.mv-ctl .seg button small, .mv-ctl .chips-f button small{margin-left:5px; font-weight:700; color:var(--muted)}
+.mvt2 td.v{min-width:250px}
+.mv-top{display:inline-flex; flex-wrap:wrap; align-items:center; gap:4px 10px; background:#f6f7f9; border:1px solid var(--line); border-radius:10px; padding:5px 10px}
+.mv-top em{font-style:normal; font-size:.78rem; font-weight:800; color:var(--muted)}
+.mv-ft{font-size:1.06rem; font-weight:900; font-variant-numeric:tabular-nums; white-space:nowrap}
+.mv-ft .mv-a{color:var(--muted); font-weight:700; font-size:.9rem}
+.mv-ft i{font-style:normal; margin:0 5px; color:var(--muted)}
+.mv-ft b.up{color:#c0262d} .mv-ft b.down{color:#1b7a46}
+.mvt2 .rk-tag{font-size:.72rem; font-weight:900; border-radius:99px; padding:1px 8px; background:#f1f3f5; color:#5b6470; white-space:nowrap}
+.mvt2 .rk-tag.up{background:#fdecec; color:#c0262d} .mvt2 .rk-tag.down{background:#e7f5ec; color:#1b7a46}
+.mv-rest{display:block; margin-top:4px; font-size:.78rem; color:var(--muted)}
+
+/* 看盤教室：頂部的規則速查入口 */
+.rules-go{display:inline-flex; flex-wrap:wrap; align-items:baseline; gap:2px 10px; margin-top:14px; padding:10px 16px; border-radius:12px;
+  background:#FEDE00; color:#3a2400; text-decoration:none; box-shadow:0 6px 16px rgba(0,0,0,.25)}
+.rules-go b{font-size:1.02rem; font-weight:900}
+.rules-go span{font-size:.88rem; font-weight:700}
+.rules-go:hover{background:#ffe94d}
+
+/* ── 5. 雙入口：單場頁（深色上方）＋頁尾 ── */
+.bb-dual{display:flex; flex-wrap:wrap; gap:8px}
+.bb-dual a{flex:1 1 150px; max-width:240px; display:flex; flex-direction:column; gap:1px; padding:6px 14px; border-radius:10px; border:1px solid rgba(255,255,255,.28); color:#fff; text-decoration:none; line-height:1.35}
+.bb-dual a b{font-size:.72rem; color:#b9c4d6; font-weight:700}
+.bb-dual a span{font-size:.92rem; font-weight:900}
+.bb-dual a:hover{border-color:#FEDE00}
+.f-dual .btn-ghost + .btn-ghost{background:transparent; color:#fff; border-color:rgba(255,255,255,.45)}
+.f-dual .btn-ghost + .btn-ghost:hover{border-color:#fff}
